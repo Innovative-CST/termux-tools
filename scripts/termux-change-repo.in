@@ -7,8 +7,6 @@ MIRROR_BASE_DIR="@TERMUX_PREFIX@/etc/termux/mirrors"
 
 if [ "$1" == "--help" ] || [ "$1" == "-help" ]; then
     echo "Script for choosing a group of mirrors to use."
-    echo "All mirrors are listed at"
-    echo "https://github.com/termux/termux-packages/wiki/Mirrors"
     exit 0
 fi
 
@@ -24,11 +22,6 @@ select_repository_group() {
     MIRRORS=()
     MIRRORS+=("All mirrors" "All in the entire world" "on")
     MIRRORS+=("Mirrors in Asia" "All in Asia (excl. Chinese Mainland and Russia)" "off")
-    MIRRORS+=("Mirrors in Chinese Mainland" "All in Chinese Mainland" "off")
-    MIRRORS+=("Mirrors in Europe" "All in Europe" "off")
-    MIRRORS+=("Mirrors in North America" "All in North America" "off")
-    MIRRORS+=("Mirrors in Oceania" "All in Oceania" "off")
-    MIRRORS+=("Mirrors in Russia" "All in Russia" "off")
 
     local TEMPFILE="$(mktemp @TERMUX_PREFIX@/tmp/mirror.XXXXXX)"
     dialog \
@@ -57,30 +50,6 @@ select_repository_group() {
         echo "[*] Mirrors in Asia (excl. Chinese Mainland and Russia) selected"
         unlink_and_link ${MIRROR_BASE_DIR}/asia
 
-    elif [ "$mirror_group" == "Mirrors in Chinese Mainland" ]; then
-        echo "[*] Mirrors in Chinese Mainland selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/chinese_mainland
-
-    elif [ "$mirror_group" == "Mirrors in Europe" ]; then
-        echo "[*] Mirrors in Europe selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/europe
-
-    elif [ "$mirror_group" == "Mirrors in North America" ]; then
-        echo "[*] Mirrors in North America selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/north_america
-
-    elif [ "$mirror_group" == "Mirrors in Oceania" ]; then
-        echo "[*] Mirrors in Oceania selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/oceania
-
-    elif [ "$mirror_group" == "Mirrors in Russia" ]; then
-        echo "[*] Mirrors in Russia selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/russia
-
-    elif [ "$mirror_group" == "All mirrors" ]; then
-        echo "[*] All mirrors selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/all
-
     else
         echo "[!] Error: unknown mirror group: '$1'. Exiting"
         exit 1
@@ -96,15 +65,15 @@ get_mirror_description() {
 }
 
 select_individual_mirror() {
-    mirrors=($(find ${MIRROR_BASE_DIR}/{asia,chinese_mainland,europe,north_america,oceania,russia}/ -type f ! -name "*\.dpkg-old" ! -name "*\.dpkg-new" ! -name "*~"))
+    mirrors=($(find ${MIRROR_BASE_DIR}/{asia}/ -type f ! -name "*\.dpkg-old" ! -name "*\.dpkg-new" ! -name "*~"))
 
     # Choose default mirror per default
     MIRRORS=("$(get_mirror_url "${MIRROR_BASE_DIR}/default")" "$(get_mirror_description "${MIRROR_BASE_DIR}/default")" "on")
     # Special handling of packages.termux.dev mirror to put it on top:
-    MIRRORS+=("$(get_mirror_url "${MIRROR_BASE_DIR}/europe/packages.termux.dev")" "$(get_mirror_description "${MIRROR_BASE_DIR}/europe/packages.termux.dev")" "off")
+    MIRRORS+=("$(get_mirror_url "${MIRROR_BASE_DIR}/asia/mirror.icst.buildtool")" "$(get_mirror_description "${MIRROR_BASE_DIR}/asia/mirror.icst.buildtool")" "off")
     for mirror in ${mirrors[@]}; do
         mirror_url=$(get_mirror_url "$mirror")
-        if [ "$mirror_url" == "packages.termux.dev" ]; then continue; fi
+        if [ "$mirror_url" == "mirror.icst.buildtool" ]; then continue; fi
         MIRRORS+=("$mirror_url" "$(get_mirror_description "$mirror")" "off")
     done
 
