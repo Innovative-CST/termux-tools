@@ -43,11 +43,14 @@ $(eval $(call process-rule,motd.sh))
 motd:
 	@echo "Creating motd file"
 
-	@echo "Welcome to Termux!" > motd
+	@echo "Welcome to Android AppStudio!" > motd
 	@echo "" >> motd
-	@echo "Docs:       https://termux.dev/docs" >> motd
-	@echo "Donate:     https://termux.dev/donate" >> motd
-	@echo "Community:  https://termux.dev/community" >> motd
+	@echo "Discord:       https://discord.gg/RM5qaZs4kd" >> motd
+	@echo "instagram:     https://www.instagram.com/innovative_cst" >> motd
+	@echo "YouTube:       https://youtube.com/@innovative-cst" >> motd
+	@echo "X:             https://x.com/Innovative_cst" >> motd
+	@echo "Patreon:       https://www.patreon.com/DevKumar" >> motd
+	
 
 	@echo "" >> motd
 	@echo "Working with packages:" >> motd
@@ -56,16 +59,6 @@ motd:
 	@echo " - Install: pkg install <package>" >> motd
 	@echo " - Upgrade: pkg upgrade" >> motd
 
-    ifeq ($(TERMUX_PACKAGE_MANAGER),apt)
-		@echo "" >> motd
-		@echo "Subscribing to additional repositories:" >> motd
-		@echo "" >> motd
-		@echo " - Root:    pkg install root-repo" >> motd
-		@echo " - X11:     pkg install x11-repo" >> motd
-		@echo "" >> motd
-		@echo "For fixing any repository issues," >> motd
-		@echo "try 'termux-change-repo' command." >> motd
-    endif
-
 	@echo "" >> motd
-	@echo "Report issues at https://termux.dev/issues" >> motd
+	@echo "Report packages issues at https://github.com/Innovative-CST/termux-packages/issues" >> motd
+	@echo "Report app issues at https://github.com/Innovative-CST/AndroidAppStudio/issues" >> motd
