@@ -1,0 +1,4 @@
+# This file is sourced by pkg
+# Mirror by ICST, hosted on github
+WEIGHT=1
+MAIN="https://github.com/Innovative-CST/blockidle-pkg-buildtools-mirror"

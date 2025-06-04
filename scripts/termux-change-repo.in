@@ -8,7 +8,7 @@ MIRROR_BASE_DIR="@TERMUX_PREFIX@/etc/termux/mirrors"
 if [ "$1" == "--help" ] || [ "$1" == "-help" ]; then
     echo "Script for choosing a group of mirrors to use."
     echo "All mirrors are listed at"
-    echo "https://github.com/termux/termux-packages/wiki/Mirrors"
+    echo "https://github.com/Innovative-CST/blockidle-pkg-default-mirror"
     exit 0
 fi
 
@@ -23,12 +23,7 @@ unlink_and_link() {
 select_repository_group() {
     MIRRORS=()
     MIRRORS+=("All mirrors" "All in the entire world")
-    MIRRORS+=("Mirrors in Asia" "All in Asia (excl. Chinese Mainland and Russia)")
-    MIRRORS+=("Mirrors in Chinese Mainland" "All in Chinese Mainland")
-    MIRRORS+=("Mirrors in Europe" "All in Europe")
     MIRRORS+=("Mirrors in North America" "All in North America")
-    MIRRORS+=("Mirrors in Oceania" "All in Oceania")
-    MIRRORS+=("Mirrors in Russia" "All in Russia")
 
     local TEMPFILE="$(mktemp @TERMUX_PREFIX@/tmp/mirror.XXXXXX)"
     dialog \
@@ -53,29 +48,9 @@ select_repository_group() {
     mirror_group="$(cat "$TEMPFILE")"
     rm "$TEMPFILE"
 
-    if [ "$mirror_group" == "Mirrors in Asia" ]; then
-        echo "[*] Mirrors in Asia (excl. Chinese Mainland and Russia) selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/asia
-
-    elif [ "$mirror_group" == "Mirrors in Chinese Mainland" ]; then
-        echo "[*] Mirrors in Chinese Mainland selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/chinese_mainland
-
-    elif [ "$mirror_group" == "Mirrors in Europe" ]; then
-        echo "[*] Mirrors in Europe selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/europe
-
-    elif [ "$mirror_group" == "Mirrors in North America" ]; then
+    if [ "$mirror_group" == "Mirrors in North America" ]; then
         echo "[*] Mirrors in North America selected"
         unlink_and_link ${MIRROR_BASE_DIR}/north_america
-
-    elif [ "$mirror_group" == "Mirrors in Oceania" ]; then
-        echo "[*] Mirrors in Oceania selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/oceania
-
-    elif [ "$mirror_group" == "Mirrors in Russia" ]; then
-        echo "[*] Mirrors in Russia selected"
-        unlink_and_link ${MIRROR_BASE_DIR}/russia
 
     elif [ "$mirror_group" == "All mirrors" ]; then
         echo "[*] All mirrors selected"
@@ -102,7 +77,7 @@ get_mirror_description() {
 }
 
 select_individual_mirror() {
-    mirrors=($(find ${MIRROR_BASE_DIR}/{asia,chinese_mainland,europe,north_america,oceania,russia}/ -type f ! -name "*\.dpkg-old" ! -name "*\.dpkg-new" ! -name "*~"))
+    mirrors=($(find ${MIRROR_BASE_DIR}/{north_america}/ -type f ! -name "*\.dpkg-old" ! -name "*\.dpkg-new" ! -name "*~"))
 
     # Choose default mirror per default
     MIRRORS=("$(get_mirror_url "${MIRROR_BASE_DIR}/default")" "$(get_mirror_description "${MIRROR_BASE_DIR}/default")")
