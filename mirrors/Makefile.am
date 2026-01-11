@@ -2,45 +2,7 @@
 pkgdata_MIRRORS = default
 
 # Mirrors in Asia (excl. Chinese_Mainland and Russia)
-pkgdata_ASIA_MIRRORS = mirror.nag.albony.in \
-mirrors.cbrx.io linux.domainesia.com mirror.nevacloud.com            \
-tmx.xvx.my.id  mirrors.nguyenhoang.cloud         \
-mirror.freedif.org mirror.twds.com.tw mirrors.in.sahilister.net       \
-mirrors.saswata.cc termux.niranjan.co mirrors.ravidwivedi.in          \
-mirror.jeonnam.school mirror.rinarin.dev mirrors.krnk.org             \
-mirror.meowsmp.net 
-
-# Mirrors in Chinese Mainland
-pkgdata_CHINESE_MAINLAND_MIRRORS = mirrors.tuna.tsinghua.edu.cn      \
-mirror.iscas.ac.cn mirrors.nju.edu.cn mirrors.pku.edu.cn             \
-mirrors.ustc.edu.cn mirrors.bfsu.edu.cn	mirrors.aliyun.com           \
-mirrors.cqupt.edu.cn mirror.nyist.edu.cn mirrors.sau.edu.cn	         \
-mirrors.sdu.edu.cn mirrors.sustech.edu.cn mirrors.zju.edu.cn         \
-mirror.sjtu.edu.cn mirrors.hust.edu.cn mirrors.cernet.edu.cn
-
-# Mirrors in Europe
-pkgdata_EUROPE_MIRRORS = grimler.se			\
-packages.termux.dev termux.librehat.com \
-termux.mentality.rip mirrors.de.sahilister.net termux.cdn.lumito.net	\
-termux.3san.dev mirror.accum.se			\
-md.mirrors.hacktegic.com ftp.fau.de is.mirror.flokinet.net		\
-ro.mirror.flokinet.net mirrors.medzik.dev	\
-mirror.sunred.org mirror.autkin.net mirror.bouwhuis.network		\
-mirror.leitecastro.com ftp.agdsn.de	ftp.icm.edu.pl		        \
-nl.mirror.flokinet.net mirror.cutie.dating
-
-# Mirrors in North America
-pkgdata_NORTH_AMERICA_MIRRORS = plug-mirror.rcac.purdue.edu          \
-mirrors.utermux.dev mirror.fcix.net mirror.mwt.me   \
-mirror.vern.cc mirror.csclub.uwaterloo.ca mirror.quantum5.ca		 \
-termux.danyael.xyz gnlug.org
-
-# Mirrors in Oceania
-pkgdata_OCEANIA_MIRRORS = mirrors.middlendian.com
-
-# Mirrors in Russia
-pkgdata_RUSSIA_MIRRORS = mirror.mephi.ru repository.su
-
+pkgdata_ASIA_MIRRORS = icst.github.io
 
 # Removed, renamed or moved mirrors
 # Mirrors files are marked as conffiles and they are manually deleted
@@ -109,20 +71,8 @@ uninstall-$1:
 endef
 
 $(eval $(call install-mirror-rule,asia,ASIA))
-$(eval $(call install-mirror-rule,chinese_mainland,CHINESE_MAINLAND))
-$(eval $(call install-mirror-rule,europe,EUROPE))
-$(eval $(call install-mirror-rule,north_america,NORTH_AMERICA))
-$(eval $(call install-mirror-rule,oceania,OCEANIA))
-$(eval $(call install-mirror-rule,russia,RUSSIA))
 
 $(eval $(call uninstall-mirror-rule,asia,ASIA))
-$(eval $(call uninstall-mirror-rule,chinese_mainland,CHINESE_MAINLAND))
-$(eval $(call uninstall-mirror-rule,europe,EUROPE))
-$(eval $(call uninstall-mirror-rule,north_america,NORTH_AMERICA))
-$(eval $(call uninstall-mirror-rule,oceania,OCEANIA))
-$(eval $(call uninstall-mirror-rule,russia,RUSSIA))
-
-
 
 install-default: $(pkgdata_MIRRORS)
 	$(MKDIR_P) $(DESTDIR)$(sysconfdir)/termux/mirrors
@@ -152,10 +102,8 @@ create-deb-control-files:
 
 
 
-install-data-local: uninstall-removed-mirrors install-default install-asia install-chinese_mainland install-europe install-north_america install-oceania install-russia create-deb-control-files
+install-data-local: uninstall-removed-mirrors install-default install-asia create-deb-control-files
 
-uninstall-local: uninstall-removed-mirrors uninstall-default uninstall-asia uninstall-chinese_mainland uninstall-europe uninstall-north_america uninstall-oceania uninstall-russia
+uninstall-local: uninstall-removed-mirrors uninstall-default uninstall-asia
 
-EXTRA_DIST = $(pkgdata_MIRRORS) $(pkgdata_ASIA_MIRRORS)		\
-$(pkgdata_CHINESE_MAINLAND_MIRRORS) $(pkgdata_EUROPE_MIRRORS)		\
-$(pkgdata_NORTH_AMERICA_MIRRORS) $(pkgdata_OCEANIA_MIRRORS)	
+EXTRA_DIST = $(pkgdata_MIRRORS) $(pkgdata_ASIA_MIRRORS)

@@ -53,6 +53,6 @@ else
 		fi
 
 		export CLASSPATH="$AM_APK_TMP_PATH"
-		/system/bin/app_process -Xnoimage-dex2oat / "com.termux.termuxam.Am" stopservice "@TERMUX_APP_PACKAGE@/@TERMUX_APP_PACKAGE@.app.TermuxService"
+		/system/bin/app_process -Xnoimage-dex2oat / "com.icst.blockidle.termuxam.Am" stopservice "@TERMUX_APP_PACKAGE@/@TERMUX_APP_PACKAGE@.app.TermuxService"
 	fi
 fi
