@@ -369,7 +369,12 @@ select_mirror() {
 			;;
 			# There should always be a main repo, so fallback to
 			# creating sources.list if the `main.sources` file is missing
-			*) echo "deb $MAIN stable main" > "@TERMUX_PREFIX@/etc/apt/sources.list";;
+			*)
+        echo "deb $MAIN stable main" > "@TERMUX_PREFIX@/etc/apt/sources.list"
+        if [ -n "$BUILD_TOOLS" ]; then
+          echo "deb $BUILD_TOOLS stable main" >> "@TERMUX_PREFIX@/etc/apt/sources.list"
+    		fi
+        ;;
 		esac
 
 		case "${has_repo_x11:-}" in

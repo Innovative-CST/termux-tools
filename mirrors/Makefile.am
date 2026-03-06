@@ -2,8 +2,7 @@
 pkgdata_MIRRORS = default
 
 # Mirrors in Asia (excl. Chinese_Mainland and Russia)
-pkgdata_ASIA_MIRRORS = icst.default.github.io \
-icst.buildtools.github.io
+pkgdata_ASIA_MIRRORS = icst.default.github.io
 
 # Removed, renamed or moved mirrors
 # Mirrors files are marked as conffiles and they are manually deleted
