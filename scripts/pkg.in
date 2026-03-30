@@ -129,6 +129,11 @@ unset_mirror_variables() {
 	unset X11
 	unset ROOT
 	unset WEIGHT
+
+  # Custom Addition for multiple repo distribution
+  unset BUILD_TOOLS
+	unset PYTHON
+	unset NODEJS
 }
 
 get_mirror_url() {
@@ -172,6 +177,21 @@ get_mirror_url() {
 		echo "Warn: Ignoring mirror '$_mirror' with invalid weight '${WEIGHT:-}'" >&2
 		return 0
 	fi
+	
+	if [[ -n "${BUILD_TOOLS:-}" && ! "${BUILD_TOOLS}" =~ ^https?://[^[:space:]]+$ ]]; then
+    echo "Warn: Invalid BUILD_TOOLS url '${BUILD_TOOLS}'" >&2
+    return 0
+  fi
+  
+  if [[ -n "${PYTHON:-}" && ! "${PYTHON}" =~ ^https?://[^[:space:]]+$ ]]; then
+      echo "Warn: Invalid PYTHON url '${PYTHON}'" >&2
+      return 0
+  fi
+  
+  if [[ -n "${NODEJS:-}" && ! "${NODEJS}" =~ ^https?://[^[:space:]]+$ ]]; then
+      echo "Warn: Invalid NODEJS url '${NODEJS}'" >&2
+      return 0
+  fi
 
 	echo "$MAIN"
 }
@@ -255,6 +275,11 @@ select_mirror() {
 
 	has_repo_x11="$(has_repo x11)"
 	has_repo_root="$(has_repo root)"
+	
+	# Custom Addition for multiple repo distribution
+	has_repo_build_tools="$(has_repo build_tools)"
+	has_repo_python="$(has_repo python)"
+	has_repo_nodejs="$(has_repo nodejs)"
 
 	set +e
 	i=0
@@ -392,6 +417,37 @@ select_mirror() {
 			;;
 			'legacy') echo "deb $ROOT root stable" > "@TERMUX_PREFIX@/etc/apt/sources.list.d/root.list";;
 		esac
+		
+		# Custom Addition for multiple repo distribution
+		case "${has_repo_build_tools:-}" in
+      'deb822')
+        sed -i -e "s|URIs:.*|$(sed_escape_replacement "URIs: $BUILD_TOOLS")|" \
+        "@TERMUX_PREFIX@/etc/apt/sources.list.d/build_tools.sources"
+      ;;
+      'legacy')
+        echo "deb $BUILD_TOOLS stable main" > "@TERMUX_PREFIX@/etc/apt/sources.list.d/build_tools.list"
+      ;;
+    esac
+    
+    case "${has_repo_python:-}" in
+      'deb822')
+        sed -i -e "s|URIs:.*|$(sed_escape_replacement "URIs: $PYTHON")|" \
+        "@TERMUX_PREFIX@/etc/apt/sources.list.d/python.sources"
+      ;;
+      'legacy')
+        echo "deb $PYTHON stable main" > "@TERMUX_PREFIX@/etc/apt/sources.list.d/python.list"
+      ;;
+    esac
+
+    case "${has_repo_nodejs:-}" in
+      'deb822')
+        sed -i -e "s|URIs:.*|$(sed_escape_replacement "URIs: $NODEJS")|" \
+        "@TERMUX_PREFIX@/etc/apt/sources.list.d/nodejs.sources"
+      ;;
+      'legacy')
+        echo "deb $NODEJS stable main" > "@TERMUX_PREFIX@/etc/apt/sources.list.d/nodejs.list"
+      ;;
+    esac
 	)
 }
 
